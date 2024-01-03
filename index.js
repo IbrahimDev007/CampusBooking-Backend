@@ -40,6 +40,7 @@ async function run() {
             const users = await usersCollection.find().toArray()
             res.send(users)
         })
+
         //user data added
         app.post('/users', async (req, res) => {
             const user = req.body;
@@ -57,6 +58,18 @@ async function run() {
         app.get('/collages', async (req, res) => {
             const collages = await collageCollection.find().toArray()
             res.send(collages)
+        })
+        //collage ata show by id
+        app.get('/collage/:id', async (req, res) => {
+            const Id = new ObjectId(req.params.id);
+
+            try {
+                const result = await collageCollection.findOne({ _id: Id });
+                res.send(result)
+            }
+            catch (err) {
+                res.send(err)
+            }
         })
 
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
