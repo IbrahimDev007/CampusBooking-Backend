@@ -31,7 +31,7 @@ async function run() {
 
         const usersCollection = client.db("CollageCampus").collection("userDB");
         const collageCollection = client.db("CollageCampus").collection("collageDB");
-        const popularCollection = client.db("CollageCampus").collection("popularDB");
+        const candidaterCollection = client.db("CollageCampus").collection("candidateDB");
 
         // api
         // ----------
@@ -54,6 +54,13 @@ async function run() {
             const result = await usersCollection.insertOne(user);
             res.send(result);
         });
+        //candidate added
+        app.post('/candidate', async (req, res) => {
+            const candidate = req.body;
+            const result = await candidaterCollection.insertOne(candidate);
+            res.send(result);
+        });
+
         //collage get 
         app.get('/collages', async (req, res) => {
             const collages = await collageCollection.find().toArray()
