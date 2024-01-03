@@ -90,6 +90,17 @@ async function run() {
 
         })
 
+        app.patch('/review/:id', async (req, res) => {
+            const id = req.params.id;
+            const reviewAdd = await collageCollection.updateOne(
+                { _id: new ObjectId(id) },
+                { $push: { like: new ObjectId(userId) } }
+            );
+            res.send(reviewAdd);
+        }
+        )
+
+
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
