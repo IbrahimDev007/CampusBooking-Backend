@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 require('dotenv').config();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 //midleware
 app.use(cors());
 app.use(express.json());
@@ -25,9 +25,9 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        // await client.connect();
+        await client.connect();
         // // Send a ping to confirm a successful connection
-        // await client.db("admin").command({ ping: 1 });
+        await client.db("admin").command({ ping: 1 });
 
         const usersCollection = client.db("CollageCampus").collection("userDB");
         const collageCollection = client.db("CollageCampus").collection("collageDB");
@@ -53,6 +53,11 @@ async function run() {
             const result = await usersCollection.insertOne(user);
             res.send(result);
         });
+        //collage get 
+        app.get('/collages', async (req, res) => {
+            const collages = await collageCollection.find().toArray()
+            res.send(collages)
+        })
 
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
