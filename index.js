@@ -71,6 +71,15 @@ async function run() {
                 res.send(err)
             }
         })
+        // user info get
+        app.get('/users/about/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email.toLowerCase() }
+            const result = await usersCollection.findOne(query);
+            res.send(result);
+        })
+
+
 
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
