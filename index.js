@@ -69,26 +69,19 @@ async function run() {
         app.get('/candidate/:id', async (req, res) => {
             const id = req.params.id;
 
-            try {
+            const candidateData = await candidaterCollection.find({
+                userId: id
+            }).toArray();
 
-                const candidateData = await candidaterCollection.findOne({
-                    userId
-                        : new ObjectId(id)
-                });
+            res.send(candidateData);
 
-                res.send(candidateData)
-
-            } catch (error) {
-                res.send(error)
-            }
-
-        })
+        });
         //collage ata show by id
         app.get('/collage/:id', async (req, res) => {
             const Id = new ObjectId(req.params.id);
 
             try {
-                const result = await collageCollection.findOne({ _id: Id });
+                const result = await collageCollection.find({ _id: Id });
                 res.send(result)
             }
             catch (err) {
@@ -113,6 +106,22 @@ async function run() {
             res.send(result);
 
         })
+
+        app.patch('/user/:id', async (req, res) => {
+
+            const id = new ObjectId(req.params.id);
+            const { rating, review } = req.query;
+            const filter = { _id: id };
+            const updateDocument = {
+                $set: {
+                    "rating": rating,
+                    "reviews": [{ "reviews": review }]
+                }
+            };
+            const result = await collageCollection.updateOne(filter, updateDocument);
+            res.json(result);
+        });
+
 
         app.patch('/review/:id', async (req, res) => {
             const id = req.params.id;
