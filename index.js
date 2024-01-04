@@ -66,6 +66,23 @@ async function run() {
             const collages = await collageCollection.find().toArray()
             res.send(collages)
         })
+        app.get('/candidate/:id', async (req, res) => {
+            const id = req.params.id;
+
+            try {
+
+                const candidateData = await candidaterCollection.findOne({
+                    userId
+                        : new ObjectId(id)
+                });
+
+                res.send(candidateData)
+
+            } catch (error) {
+                res.send(error)
+            }
+
+        })
         //collage ata show by id
         app.get('/collage/:id', async (req, res) => {
             const Id = new ObjectId(req.params.id);
@@ -99,9 +116,15 @@ async function run() {
 
         app.patch('/review/:id', async (req, res) => {
             const id = req.params.id;
+            const body = req.body;
             const reviewAdd = await collageCollection.updateOne(
                 { _id: new ObjectId(id) },
-                { $push: { like: new ObjectId(userId) } }
+                {
+                    $push: {
+                        reviews
+                            : body
+                    }
+                }
             );
             res.send(reviewAdd);
         }
