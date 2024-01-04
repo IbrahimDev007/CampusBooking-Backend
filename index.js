@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 //mongodb client here 
 const { MongoClient, ServerApiVersion, ObjectId, aggregate } = require('mongodb');
-const { Console } = require('console');
+const { Console, log } = require('console');
 // const uri = `mongodb://127.0.0.1:27017`;
 const uri = process.env.URI;
 
@@ -106,9 +106,19 @@ async function run() {
             res.send(result);
 
         })
+        app.get('/hero', async (req, res) => {
+            const { clg } = req.query;
+
+            const result = await collageCollection.find({ name: { $regex: clg, $options: 'i' } }).toArray();
+            if (result.length < 1) {
+                res.send([]);
+            } else {
+                res.send(result);
+            }
+        });
+
 
         app.patch('/user/:id', async (req, res) => {
-
             const id = new ObjectId(req.params.id);
             const { rating, review } = req.query;
             const filter = { _id: id };
@@ -121,8 +131,6 @@ async function run() {
             const result = await collageCollection.updateOne(filter, updateDocument);
             res.json(result);
         });
-
-
         app.patch('/review/:id', async (req, res) => {
             const id = req.params.id;
             const body = req.body;
