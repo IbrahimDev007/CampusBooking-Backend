@@ -78,15 +78,10 @@ async function run() {
         });
         //collage ata show by id
         app.get('/collage/:id', async (req, res) => {
-            const Id = new ObjectId(req.params.id);
+            console.log(req.params.id);
+            const result = await collageCollection.findOne({ _id: Id });
 
-            try {
-                const result = await collageCollection.find({ _id: Id });
-                res.send(result)
-            }
-            catch (err) {
-                res.send(err)
-            }
+            res.send(result)
         })
         // user info get
         app.get('/users/about/:email', async (req, res) => {
