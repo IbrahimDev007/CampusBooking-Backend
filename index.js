@@ -36,6 +36,7 @@ async function run() {
         // api
         // ----------
         //all user see
+
         app.get('/users', async (req, res) => {
             const users = await usersCollection.find().toArray()
             res.send(users)
@@ -78,9 +79,8 @@ async function run() {
         });
         //collage ata show by id
         app.get('/collage/:id', async (req, res) => {
-            console.log(req.params.id);
-            const result = await collageCollection.findOne({ _id: Id });
-
+            const Id = new ObjectId(req.params.id);
+            const result = await collageCollection.find({ _id: Id }).toArray();
             res.send(result)
         })
         // user info get
